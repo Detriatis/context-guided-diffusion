@@ -22,6 +22,7 @@ if data_name == 'ZINC250k':
     path = 'data/zinc250k.csv'
     smiles_col = 'smiles'
     label_idx = 1
+
 elif data_name == 'ZINC500k':
     max_atoms = 38
     path = 'data/zinc500k.csv'
