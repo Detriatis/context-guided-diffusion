@@ -93,7 +93,7 @@ def dataloader(config, get_graph_list=False, prop=None, device=None):
     use_hard_split = True
 
     dataset_cache_file = os.path.join(
-        "/data/stat-cadd/bras5033/guided_diffusion/MOOD/data/cached_dataloaders",
+        "/data/cached_dataloaders",
         f"dataset_{config.data.data.lower()}_{prop}_{get_graph_list}_{use_hard_split}.pkl",
     )
 
@@ -274,7 +274,7 @@ def dataloader(config, get_graph_list=False, prop=None, device=None):
 def contextloader(config, get_graph_list=False, device=None):
 
     contextset_cache_file = os.path.join(
-        "/data/stat-cadd/bras5033/guided_diffusion/MOOD/data/cached_contextloaders",
+        "data/cached_contextloaders",
         f"contextset_{config.data.context.lower()}_{get_graph_list}.pkl",
     )
 
