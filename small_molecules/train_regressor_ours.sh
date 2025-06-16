@@ -1,7 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name="mood"
-#SBATCH --array=0-4
-#SBATCH --partition=devel
+#SBATCH --partition=himem
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --mem-per-cpu=32G
@@ -18,11 +17,11 @@ conda activate mood
 for i in {0..57}
 do
     echo "Running training $i"
-    python -u main.py --type train --config prop_train_fseb/prop_train_${SLURM_ARRAY_TASK_ID}_${i}
+    python -u main.py --type train --config prop_train_fseb/prop_train_2_${i}
 done
 
 for j in {0..2}
 do
     echo "Running sample $j"
-    python -u main.py --type retrain_best --config prop_train_fseb/sample_${SLURM_ARRAY_TASK_ID}_${j}
+    python -u main.py --type retrain_best --config prop_train_fseb/sample_2_${j}
 done
