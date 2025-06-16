@@ -10,9 +10,10 @@ nvidia-smi -L
 
 set -e  # fail fully on first line failure
 
-module load Anaconda3/2022.10
-module load CUDA/11.3.1 
+source "$(conda info --base)"/etc/profile.d/conda.sh
 conda activate mood
+
+module load cuda/12.6.2
 
 for i in {0..57}
 do
