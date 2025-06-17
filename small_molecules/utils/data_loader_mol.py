@@ -93,7 +93,7 @@ def dataloader(config, get_graph_list=False, prop=None, device=None):
     use_hard_split = True
 
     dataset_cache_file = os.path.join(
-        "/data/cached_dataloaders",
+        "data/cached_dataloaders",
         f"dataset_{config.data.data.lower()}_{prop}_{get_graph_list}_{use_hard_split}.pkl",
     )
 

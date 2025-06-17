@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name="mood"
-#SBATCH --partition=himem
+#SBATCH --partition=gpuV
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --mem-per-cpu=32G
