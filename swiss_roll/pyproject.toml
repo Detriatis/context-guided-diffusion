@@ -1,0 +1,23 @@
+[project]
+name = "swiss_roll"
+version = "0.1.0"
+description = "Toy Example Implementation from Context Guided Diffusion"
+authors = [
+    {name = "Michael Dodds", email = "michael.dodds-3@postgrad.manchester.ac.uk"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy (>=2.3.0,<3.0.0)",
+    "pandas (>=2.3.0,<3.0.0)",
+    "matplotlib (>=3.10.3,<4.0.0)",
+    "scikit-learn (>=1.7.0,<2.0.0)",
+    "pyyaml (>=6.0.2,<7.0.0)",
+    "psutil (>=7.0.0,<8.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
