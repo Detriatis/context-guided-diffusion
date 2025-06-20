@@ -6,8 +6,7 @@ import psutil
 import yaml
 import argparse
 
-from swiss_roll.datagen import load_swissroll
-from swiss_roll.utils import save_model, save_metrics 
+from swiss_roll.utils import save_model, save_metrics, load_swissroll
 from swiss_roll import DATA_DIR, RUNS_DIR, CONF_DIR
 from sklearn.datasets import make_swiss_roll
 from torch.utils.data import Dataset, DataLoader
