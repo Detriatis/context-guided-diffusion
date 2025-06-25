@@ -33,4 +33,5 @@ def load_swissroll(path=None):
         xyz_points = data['xyz_points']
         manifold_points = data['manifold_points']
      
+    split = manifold_points.squeeze() < 1
     return torch.tensor(xyz_points, dtype=torch.float32), torch.tensor(manifold_points, dtype=torch.float32).view(-1, 1)
