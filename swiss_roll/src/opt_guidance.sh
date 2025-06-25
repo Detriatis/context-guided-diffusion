@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=model_eval
-#SBATCH --array=0-4
+#SBATCH --array=0-1332
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=serial
-#SBATCH --mem=2G
+#SBATCH --mem=1G
 #SBATCH --time=01:00:00
 #SBATCH --output=../logs/job_%A_%a.out
 #SBATCH --error=../logs/job_%A_%a.err

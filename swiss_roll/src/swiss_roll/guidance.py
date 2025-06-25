@@ -150,7 +150,7 @@ def train_guidance_model(
     from torch.nn.functional import softplus
 
     model.train()
-    for epoch in range(4):
+    for epoch in range(100):
         for x, y in dataloader:
             x, y = x.to(device), y.to(device)
             mu, r = model(x)

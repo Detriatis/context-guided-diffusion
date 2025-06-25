@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim 
 
 from swiss_roll import DATA_DIR
-from swiss_roll.utils import load_model
+from swiss_roll.utils import load_model, load_swissroll, save_model
 
 class DiffusionBlock(nn.Module):
     def __init__(self, nunits):
@@ -52,13 +52,14 @@ def get_betas(bar_alphas):
     return 1 - (bar_alphas / torch.concat([bar_alphas[0:1], bar_alphas[:-1]])) 
 
 
-def train_diffusion_model(X, device, retrain, gen_model_path): 
+def train_diffusion_model(X, device, retrain): 
     
     schedule = cosine_schedule(40, s=0.008)
     baralphas = get_bar_alphas(schedule) 
     alphas = get_alphas(baralphas)
     betas = get_betas(baralphas)
     T = 40
+    gen_model_path = DATA_DIR / 'generator.pth'
 
     if gen_model_path.exists() and not retrain:
         model = load_model(DiffusionModel, gen_model_path)
@@ -70,28 +71,35 @@ def train_diffusion_model(X, device, retrain, gen_model_path):
             n_units=64
             )
     
-    model.train()
-    model.to(device)
-    batch_size = 2048
-    n_epochs = 100
-    loss_fn = nn.MSELoss()
-    optimiser = optim.Adam(model.parameters(), lr=0.001)
-    #scheduler = optim.lr_scheduler.LinearLR(optimiser, start_factor=1.0, end_factor=0.01, total_iters=n_epochs)
+        model.train()
+        model.to(device)
+        batch_size = 2048
+        n_epochs = 100
+        loss_fn = nn.MSELoss()
+        optimiser = optim.Adam(model.parameters(), lr=0.001)
+        #scheduler = optim.lr_scheduler.LinearLR(optimiser, start_factor=1.0, end_factor=0.01, total_iters=n_epochs)
 
-    for epoch in range(n_epochs):
-        epoch_loss = steps = 0
-        for i in range(0, len(X), batch_size):
-            XBatch = X[i:i+batch_size]
-            timesteps = torch.randint(0, T, size=[len(XBatch), 1])
-            
-            Xnoise, eps = noise(XBatch, timesteps, baralphas)
-            pred_eps = model(Xnoise.to(device), timesteps.to(device))
-            
-            loss = loss_fn(pred_eps, eps.to(device))
-            optimiser.zero_grad()
-            loss.backward()
-            optimiser.step()
-            
-            steps += 1 
-            epoch_loss += loss
-        print(f"Epoch {epoch} loss = {epoch_loss / steps}") 
+        for epoch in range(n_epochs):
+            epoch_loss = steps = 0
+            for i in range(0, len(X), batch_size):
+                XBatch = X[i:i+batch_size]
+                timesteps = torch.randint(0, T, size=[len(XBatch), 1])
+                
+                Xnoise, eps = noise(XBatch, timesteps, baralphas)
+                pred_eps = model(Xnoise.to(device), timesteps.to(device))
+                
+                loss = loss_fn(pred_eps, eps.to(device))
+                optimiser.zero_grad()
+                loss.backward()
+                optimiser.step()
+                
+                steps += 1 
+                epoch_loss += loss
+            print(f"Epoch {epoch} loss = {epoch_loss / steps}") 
+        
+        save_model(model, gen_model_path)
+
+if __name__ == '__main__':
+    XYZ_points, Y = load_swissroll() 
+    X = XYZ_points[:, [0, 2]]
+    train_diffusion_model(X, 'cpu', True)

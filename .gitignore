@@ -31,4 +31,4 @@ small_molecules/logs_*/*
 small_molecules/generated_samples*/*
 !small_molecules/checkpoints/*
 !small_molecules/checkpoints/ZINC250k/gdss_zinc250k_v2.pth
-!small_molecules/checkpoints/ZINC250k/pretrained_model_reinit.pth
+small_molecules/scorer/test_qvina02.sh
