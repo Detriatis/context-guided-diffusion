@@ -32,3 +32,6 @@ small_molecules/generated_samples*/*
 !small_molecules/checkpoints/*
 !small_molecules/checkpoints/ZINC250k/gdss_zinc250k_v2.pth
 small_molecules/scorer/test_qvina02.sh
+
+# git ignore code for Swiss Role
+!swiss_roll/runs/guidance_models/*/*.yaml
