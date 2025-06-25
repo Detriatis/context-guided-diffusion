@@ -54,10 +54,10 @@ def train_diffusion_model(X, device='cpu', retrain=True):
         model.train()
         model.to(device)
         batch_size = 2048
-        n_epochs = 100
+        n_epochs = 100 
         loss_fn = nn.MSELoss()
-        optimiser = optim.Adam(model.parameters(), lr=0.001)
-        #scheduler = optim.lr_scheduler.LinearLR(optimiser, start_factor=1.0, end_factor=0.01, total_iters=n_epochs)
+        optimiser = optim.Adam(model.parameters(), lr=1e-3)
+        scheduler = optim.lr_scheduler.LinearLR(optimiser, start_factor=1.0, end_factor=0.01, total_iters=n_epochs)
 
         for epoch in range(n_epochs):
             epoch_loss = steps = 0
@@ -72,6 +72,7 @@ def train_diffusion_model(X, device='cpu', retrain=True):
                 optimiser.zero_grad()
                 loss.backward()
                 optimiser.step()
+                scheduler.step()
                 
                 steps += 1 
                 epoch_loss += loss
@@ -80,6 +81,6 @@ def train_diffusion_model(X, device='cpu', retrain=True):
         save_model(model, gen_model_path)
 
 if __name__ == '__main__':
-    XYZ_points, Y = load_swissroll() 
+    XYZ_points, Y, _, _ = load_swissroll(split=True, split_value=1) 
     X = XYZ_points[:, [0, 2]]
     train_diffusion_model(X, 'cpu', True)

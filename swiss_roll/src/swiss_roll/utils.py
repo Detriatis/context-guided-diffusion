@@ -24,7 +24,7 @@ def load_metrics(path):
         metrics = yaml.load(f, yaml.FullLoader)
     return metrics
 
-def load_swissroll(path=None):
+def load_swissroll(path=None, split=True, split_value=1):
     if not path: 
         path = DATA_DIR / 'swiss_roll.npz'
        
@@ -32,6 +32,12 @@ def load_swissroll(path=None):
         data = np.load(f)
         xyz_points = data['xyz_points']
         manifold_points = data['manifold_points']
-     
-    split = manifold_points.squeeze() < 1
-    return torch.tensor(xyz_points, dtype=torch.float32), torch.tensor(manifold_points, dtype=torch.float32).view(-1, 1)
+    X = torch.tensor(xyz_points, dtype=torch.float32) 
+    Y = torch.tensor(manifold_points, dtype=torch.float32).view(-1, 1)
+    
+    if split: 
+        split = Y.squeeze() < split_value
+    
+        return X[split], Y[split], X[~split], Y[~split]
+    else: 
+        return X, Y, None, None 
