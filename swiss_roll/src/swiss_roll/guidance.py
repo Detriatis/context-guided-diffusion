@@ -260,11 +260,11 @@ if __name__ == '__main__':
     device='cpu'
     
     target_meanval = Y.mean().to(device)
-    print(target_meanval)
+    print(conf)
     target_logvar = torch.tensor([0.7], dtype=torch.float32)
 
     ctx_set = sample_uniform((10000, 2), -2.5, 2.5)
-
+    
     train_guidance_model(guidance_model=guidance_model, 
                          context_encoder=context_encoder, 
                          guidance_optimizer=guidance_optimiser, 
