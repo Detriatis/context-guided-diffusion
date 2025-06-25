@@ -199,7 +199,8 @@ def train_guidance_model(
             loss.backward()
             optimizer.step()
         print(f"NLL: {nll.mean().item():.4f}, L2: {l2_lambda * l2:.4f}, Reg: {reg:.4f}")
-        print("The mean predicted context", mu_ctx.mean())
+        if use_ctx: 
+            print("The mean predicted context", mu_ctx.mean())
         print("Epoch", epoch)
 
 def evaluate_model(model, dataloader, device='cpu', coverage_alpha=0.05):

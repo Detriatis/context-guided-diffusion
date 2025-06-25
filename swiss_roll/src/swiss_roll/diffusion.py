@@ -4,6 +4,7 @@ import torch.optim as optim
 
 from swiss_roll import DATA_DIR
 from swiss_roll.utils import load_model, load_swissroll, save_model
+from swiss_roll.scheduling import Schedular
 
 class DiffusionBlock(nn.Module):
     def __init__(self, nunits):
@@ -31,34 +32,13 @@ class DiffusionModel(nn.Module):
             x = block(x)
         return self.outblock(x)
 
-def noise(x, t, bar_alphas):
-    eps = torch.randn_like(x)
-    mu = (bar_alphas[t] ** 0.5).repeat(1, x.shape[1]) * x
-    var = ((1 - bar_alphas[t]) ** 0.5).repeat(1, x.shape[1]) * eps
-    return mu + var, eps
-
-def cosine_schedule(T:int, s:float) -> torch.Tensor:
-    t = torch.arange(0, T, 1, dtype=torch.float32)
-    schedule = torch.cos((t/T+ s) / (1 + s) * torch.pi / 2) ** 2
-    return schedule 
-
-def get_bar_alphas(schedule):
-    return schedule / schedule[0] 
-
-def get_alphas(bar_alphas):
-    return  bar_alphas / torch.concat([bar_alphas[0:1], bar_alphas[0:-1]])
-
-def get_betas(bar_alphas): 
-    return 1 - (bar_alphas / torch.concat([bar_alphas[0:1], bar_alphas[:-1]])) 
-
-
-def train_diffusion_model(X, device, retrain): 
+def train_diffusion_model(X, device='cpu', retrain=True): 
+    schedular = Schedular(T=40, s=0.008) 
+    schedule = schedular.schedule
+    baralphas = schedular.bar_alphas
+    alphas = schedular.alphas
+    betas = schedular.betas
     
-    schedule = cosine_schedule(40, s=0.008)
-    baralphas = get_bar_alphas(schedule) 
-    alphas = get_alphas(baralphas)
-    betas = get_betas(baralphas)
-    T = 40
     gen_model_path = DATA_DIR / 'generator.pth'
 
     if gen_model_path.exists() and not retrain:
@@ -83,9 +63,9 @@ def train_diffusion_model(X, device, retrain):
             epoch_loss = steps = 0
             for i in range(0, len(X), batch_size):
                 XBatch = X[i:i+batch_size]
-                timesteps = torch.randint(0, T, size=[len(XBatch), 1])
+                timesteps = schedular.timesteps(XBatch)
                 
-                Xnoise, eps = noise(XBatch, timesteps, baralphas)
+                Xnoise, eps = schedular.noise(XBatch, timesteps, baralphas)
                 pred_eps = model(Xnoise.to(device), timesteps.to(device))
                 
                 loss = loss_fn(pred_eps, eps.to(device))
