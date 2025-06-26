@@ -7,6 +7,7 @@ from torch.nn import GaussianNLLLoss
 import yaml
 import logging
 import argparse
+import time
 from pathlib import Path 
 
 from swiss_roll.utils import save_model, save_metrics, load_swissroll, save_config, load_config
@@ -107,8 +108,8 @@ def cgd_regularization_term(
     log_ps = torch.cat([mean_log_p, logvar_log_p], dim=0)
     return -log_ps.sum()
 
-def sample_uniform(dims, low, high) -> torch.Tensor:
-    return (high - low) * torch.rand(size=dims, dtype=torch.float32) + (low)
+def sample_uniform(dims, low, high, device=None) -> torch.Tensor:
+    return (high - low) * torch.rand(size=dims, dtype=torch.float32, device=device) + (low)
 
 def train_guidance_model(
     guidance_model, 
@@ -135,9 +136,11 @@ def train_guidance_model(
     guidance_model.train()
     for epoch in range(n_epochs):
         for x, y in dataloader:
-            t = schedular.randtimesteps(x)
             x, y = x.to(device), y.to(device)
+            
+            t = schedular.randtimesteps(x)
             x_perturbed, eps = schedular.noise(x, t) 
+           
             preds = guidance_model(x_perturbed)
             mu, logvar = preds.chunk(2, dim=-1)
             var = torch.exp(logvar).clamp_min(1e-6) 
@@ -212,7 +215,7 @@ def evaluate_model(model, dataloader, device='cpu', coverage_alpha=0.05):
 
             # Coverage: fraction of points inside predicted interval
             z = torch.distributions.Normal(0, 1).icdf(
-                torch.tensor(1 - coverage_alpha / 2)
+                torch.tensor(1 - coverage_alpha / 2, device=device)
             )
             lower = mu - z * std
             upper = mu + z * std
@@ -234,7 +237,7 @@ if __name__ == '__main__':
     parser.add_argument('--logger', required=False, default=None, help='Full logging path')
     parser.add_argument('--writeout', required=False, default=None, help='Full writeout path') 
     args = parser.parse_args()
-    
+    start = time.perf_counter()
     if args.logger is None:
         args.logger = Path("/dev/null")
     else: 
@@ -254,10 +257,12 @@ if __name__ == '__main__':
     if writeout is not None: 
         writeout = Path(writeout) 
     
-    device='cpu'
     if index:
         conf = CONF_DIR / 'guidance_conf' / f'{index}.yaml'
 
+    device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    logger.info(f'PROCESS RUNNING ON {device}') 
+    
     conf = load_config(conf)  
     
     batch_size = 128
@@ -272,8 +277,9 @@ if __name__ == '__main__':
     high_data = Data(high_X, high_Y)
     high_dataloader = DataLoader(high_data, batch_size=batch_size)
 
-    guidance_model = GuidanceModel(2, 32 , 2, 2)
-    embedding_generator = GuidanceModel(2, 32, 2, 2)
+    
+    guidance_model = GuidanceModel(2, 32 , 2, 2).to(device)
+    embedding_generator = GuidanceModel(2, 32, 2, 2).to(device)
    
     def context_encoder(x):
         h=embedding_generator.inlayer(x)
@@ -281,19 +287,15 @@ if __name__ == '__main__':
             h=layer(h)
         return h
     
-    schedular = Schedular()
+    schedular = Schedular(device=device)
     
     guidance_optimiser = optim.Adam(guidance_model.parameters(), 1e-2)
-    device='cpu'
     
     target_meanval = Y.mean().to(device)
-    target_logvar = torch.tensor([0.7], dtype=torch.float32)
+    target_logvar = torch.tensor([0.7], dtype=torch.float32).to(device)
     
     ctx_set_size = 10_000 
-    ctx_X = sample_uniform((ctx_set_size, 2), -2.5, 2.5)
-
-    ctx_Y = target_logvar.repeat(ctx_set_size).view(-1, 1)
-    ctx_data = Data(ctx_X, ctx_Y)
+    ctx_X = sample_uniform((ctx_set_size, 2), -2.5, 2.5, device=device)
 
     train_guidance_model(guidance_model=guidance_model, 
                          context_encoder=context_encoder, 
@@ -329,3 +331,4 @@ if __name__ == '__main__':
     save_metrics(run_metrics, writeout / 'eval_metrics.yaml') 
     save_model(guidance_model, writeout / 'guidance_model.pth')
     save_config(conf, writeout / 'conf.yaml')
+    logger.info(f"{time.perf_counter() - start:.6f} s")
