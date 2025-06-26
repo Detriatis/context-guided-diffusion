@@ -5,6 +5,7 @@ import torch.optim as optim
 from torch.nn import GaussianNLLLoss
 
 import yaml
+import logging
 import argparse
 from pathlib import Path 
 
@@ -92,13 +93,13 @@ def cgd_regularization_term(
     num_output_dims = model_predictions.shape[-1]
     
     mean_preds = model_predictions[:, :(num_output_dims // 2):]
-    logvar_preds = model_predictions[:, (num_output_dims // 2):]
+    logvar_preds = model_predictions[:, (num_output_dims // 2):].clamp(min=-20)
 
     mean_target = torch.ones_like(mean_preds) * target_mean_hyper
-    var_target = torch.ones_like(logvar_preds) * target_logvar_hyper 
+    logvar_target = torch.ones_like(logvar_preds) * target_logvar_hyper 
     
     means_likelihood = MultivariateNormal(mean_target.T, K)
-    logvars_likelihood = MultivariateNormal(var_target.T, K)
+    logvars_likelihood = MultivariateNormal(logvar_target.T, K)
 
     mean_log_p = means_likelihood.log_prob(mean_preds.T)
     logvar_log_p =  logvars_likelihood.log_prob(logvar_preds.T)
@@ -133,7 +134,6 @@ def train_guidance_model(
 
     guidance_model.train()
     for epoch in range(n_epochs):
-        print(epoch) 
         for x, y in dataloader:
             t = schedular.randtimesteps(x)
             x, y = x.to(device), y.to(device)
@@ -153,10 +153,8 @@ def train_guidance_model(
                 t = schedular.randtimesteps(x_ctx)
                 x_ctx_perturbed, ctx_eps = schedular.noise(x_ctx, t)
 
-
                 with torch.no_grad():
                     ctx_embeds = context_encoder(x_ctx_perturbed)
-
                 
                 ctx_preds = guidance_model(x_ctx_perturbed)
                 
@@ -181,11 +179,13 @@ def train_guidance_model(
             guidance_optimizer.zero_grad()
             loss.backward()
             guidance_optimizer.step()
-        print(f"NLL: {nll.mean().item():.4f}, L2: {l2_lambda * l2:.4f}, Reg: {reg:.4f}")
-        print(f"Total loss {loss:.4f}")
+        
+        logger.info(f"NLL: {nll.item():.4f}, L2: {l2_lambda * l2:.4f}, Reg: {reg * reg_lambda:.4f}")
+        logger.info(f"Total loss {loss:.4f}")
         if use_ctx: 
-            print(f"Predicted mean: {ctx_preds[:, 0].mean().item():.4f}", 
-                  f"Predicted uncertainity {ctx_preds[:, 1].mean().item():.4f}")
+            logger.info(f"Predicted mean: {ctx_preds[:, 0].mean().item():.4f}") 
+            logger.info(f"Predicted uncertainity {ctx_preds[:, 1].mean().item():.4f}")
+        logger.info(f"Completed epoch {epoch+1} of {n_epochs}\n")
 
 def evaluate_model(model, dataloader, device='cpu', coverage_alpha=0.05):
     model.eval()
@@ -231,9 +231,19 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--index', required=False, default=None) 
     parser.add_argument('--conf', required=False, default=None, help='Full conf path')
+    parser.add_argument('--logger', required=False, default=None, help='Full logging path')
     parser.add_argument('--writeout', required=False, default=None, help='Full writeout path') 
     args = parser.parse_args()
-   
+    
+    if args.logger is None:
+        args.logger = Path("/dev/null")
+    else: 
+        args.logger = Path(args.logger).with_suffix('.log')
+        args.logger.parent.mkdir(parents=True, exist_ok=True)
+    
+    logging.basicConfig(filename=args.logger, encoding='utf-8', level=logging.INFO, datefmt='%m/%d/%Y %I:%M:%S %p')
+    logger = logging.getLogger(__name__) 
+    
     index = args.index
     conf = args.conf
     writeout = args.writeout
@@ -283,7 +293,6 @@ if __name__ == '__main__':
 
     ctx_Y = target_logvar.repeat(ctx_set_size).view(-1, 1)
     ctx_data = Data(ctx_X, ctx_Y)
-
 
     train_guidance_model(guidance_model=guidance_model, 
                          context_encoder=context_encoder, 
