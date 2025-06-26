@@ -1,7 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=model_eval
-#SBATCH --array=0-158
-#SBATCH --partition=serial
+#SBATCH --array=0-1
+#SBATCH --partition=multicore
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=2G
 #SBATCH --time=10:00:00
 #SBATCH --output=../logs/job_%A_%a.out
@@ -12,7 +13,8 @@ conda activate swiss_roll
 
 # SLURM_ARRAY_TASK_ID=1
 BATCH_ID=$(printf "%03d" $SLURM_ARRAY_TASK_ID)
-SCRIPTDIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)"
+# SCRIPTDIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)"
+SCRIPTDIR="$SLURM_SUBMIT_DIR"
 TMPDIR=${SLURM_TMPDIR:-/tmp}
 BATCHCONFIGS=${SCRIPTDIR}/../conf/batched_configs
 
