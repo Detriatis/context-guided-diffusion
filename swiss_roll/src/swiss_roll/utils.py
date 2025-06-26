@@ -24,6 +24,15 @@ def load_metrics(path):
         metrics = yaml.load(f, yaml.FullLoader)
     return metrics
 
+def save_config(config: dict, path):
+    with open(path, 'w') as f:
+        yaml.dump(config, f) 
+
+def load_config(path):
+    with open(path, 'r') as f:
+        conf = yaml.load(f, yaml.FullLoader) 
+    return conf 
+
 def load_swissroll(path=None, split=True, split_value=1):
     if not path: 
         path = DATA_DIR / 'swiss_roll.npz'

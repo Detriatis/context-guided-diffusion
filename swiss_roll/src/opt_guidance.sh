@@ -1,8 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=model_eval
 #SBATCH --array=0-158
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
 #SBATCH --partition=serial
 #SBATCH --mem=2G
 #SBATCH --time=10:00:00
@@ -12,27 +10,33 @@ module purge
 source "$(conda info --base)"/etc/profile.d/conda.sh
 conda activate swiss_roll
 
-TMPDIR=${SLURM_TMPDIR:-/tmp}
+# SLURM_ARRAY_TASK_ID=1
 BATCH_ID=$(printf "%03d" $SLURM_ARRAY_TASK_ID)
-
-BATCHCONFIGS=/mnt/iusers01/mace01/e56218md/scratch/context-guided-diffusion/swiss_roll/conf/batched_configs
+SCRIPTDIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)"
+TMPDIR=${SLURM_TMPDIR:-/tmp}
+BATCHCONFIGS=${SCRIPTDIR}/../conf/batched_configs
 
 BATCH_TARBALL=${BATCHCONFIGS}/batch_${BATCH_ID}.tar.gz
-echo $BATCH_TARBALL
 
 cp $BATCH_TARBALL $TMPDIR
-mkdir -p $TMPDIR/conf
-tar -xzf $TMPDIR/batch_${BATCH_ID}.tar.gz -C $TMPDIR/conf
+mkdir -p $TMPDIR/batch_$BATCH_ID/conf
+tar -xzf $TMPDIR/batch_${BATCH_ID}.tar.gz -C $TMPDIR/batch_$BATCH_ID/conf
 
-for CONF in $TMPDIR/conf/*.yaml; do
+for CONF in ${TMPDIR}/batch_${BATCH_ID}/conf/*.yaml; do
     RUN_ID=$(basename "$CONF" .yaml)
-    echo "Starting run: $RUN_ID"
-    WRITEOUT="$TMPDIR/output/run_${RUN_ID}"
+    WRITEOUT="$TMPDIR/batch_$BATCH_ID/output/run_${RUN_ID}"
+    LOGGER="$TMPDIR/batch_$BATCH_ID/output/run_${RUN_ID}/logger"
+    
     mkdir -p "$WRITEOUT"
 
-    python swiss_roll/guidance.py \
+    echo "Starting run: $RUN_ID"
+    python ${SCRIPTDIR}/swiss_roll/guidance.py \
         --conf "$CONF" \
-        --writeout "$WRITEOUT"
+        --writeout "$WRITEOUT" \
+        --logger "$LOGGER"
 done
 
-cp -r $TMPDIR/output /mnt/iusers01/mace01/e56218md/scratch/context-guided-diffusion/swiss_roll/runs/guidance_models/batch_${BATCH_ID}
+cp -r $TMPDIR/batch_$BATCH_ID/output ${SCRIPTDIR}/../runs/guidance_models/batch_${BATCH_ID}
+
+rm -r ${TMPDIR}/batch_${BATCH_ID}
+rm -r ${TMPDIR}/batch_${BATCH_ID}.tar.gz
