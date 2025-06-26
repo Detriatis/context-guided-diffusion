@@ -7,9 +7,10 @@ from torch.nn import GaussianNLLLoss
 import psutil 
 import yaml
 import argparse
+from pathlib import Path 
 
 from swiss_roll.utils import save_model, save_metrics, load_swissroll
-from swiss_roll import DATA_DIR, RUNS_DIR, CONF_DIR
+from swiss_roll import DATA_DIR, RUNS_DIR, CONF_DIR, PROJECT_ROOT
 from sklearn.datasets import make_swiss_roll
 from torch.utils.data import Dataset, DataLoader
 from swiss_roll.scheduling import Schedular
@@ -133,6 +134,7 @@ def train_guidance_model(
 
     guidance_model.train()
     for epoch in range(n_epochs):
+        print(epoch) 
         for x, y in dataloader:
             t = schedular.randtimesteps(x)
             x, y = x.to(device), y.to(device)
@@ -179,12 +181,11 @@ def train_guidance_model(
             guidance_optimizer.zero_grad()
             loss.backward()
             guidance_optimizer.step()
-        print(f"NLL: {nll.mean().item():.4f}, L2: {l2_lambda * l2:.4f}, Reg: {reg:.4f}")
-        print(f"Total loss {loss:.4f}")
-        if use_ctx: 
-            print(f"Predicted mean: {ctx_preds[:, 0].mean().item():.4f}", 
-                  f"Predicted uncertainity {ctx_preds[:, 1].mean().item():.4f}")
-        print("Epoch", epoch)
+        # print(f"NLL: {nll.mean().item():.4f}, L2: {l2_lambda * l2:.4f}, Reg: {reg:.4f}")
+        # print(f"Total loss {loss:.4f}")
+        # if use_ctx: 
+        #     print(f"Predicted mean: {ctx_preds[:, 0].mean().item():.4f}", 
+        #           f"Predicted uncertainity {ctx_preds[:, 1].mean().item():.4f}")
 
 def evaluate_model(model, dataloader, device='cpu', coverage_alpha=0.05):
     model.eval()
@@ -192,7 +193,6 @@ def evaluate_model(model, dataloader, device='cpu', coverage_alpha=0.05):
     total_mse = 0.0
     total_in_interval = 0
     total_samples = 0
-
     with torch.no_grad():
         for x, y in dataloader:
             x, y = x.to(device), y.to(device)
@@ -229,16 +229,24 @@ def evaluate_model(model, dataloader, device='cpu', coverage_alpha=0.05):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--index') 
+    parser.add_argument('--index', required=False, default=None) 
+    parser.add_argument('--conf', required=False, default=None, help='Full conf path')
+    parser.add_argument('--writeout', required=False, default=None, help='Full writeout path') 
     args = parser.parse_args()
+   
     index = args.index
+    conf = Path(args.conf)
+    writeout = Path(args.writeout)
+
+    assert (index is not None) or (conf is not None and writeout is not None), "Must provide either --index or both --conf and --writeout"
 
     device='cpu'
-    conf = CONF_DIR / 'guidance_conf' / f'{index}.yaml'
+    if index:
+        conf = CONF_DIR / 'guidance_conf' / f'{index}.yaml'
     
     with open(conf, 'r') as f:
         conf = yaml.load(f, yaml.FullLoader) 
-      
+    
     X, Y, _, _  = load_swissroll(split=True, split_value=1) 
     X = X[:, [0, 2]]
     data = Data(X, Y)
@@ -260,7 +268,7 @@ if __name__ == '__main__':
     device='cpu'
     
     target_meanval = Y.mean().to(device)
-    print(conf)
+    # print(conf)
     target_logvar = torch.tensor([0.7], dtype=torch.float32)
 
     ctx_set = sample_uniform((10000, 2), -2.5, 2.5)
@@ -278,12 +286,13 @@ if __name__ == '__main__':
                          device=device)
    
     results = evaluate_model(guidance_model, dataloader, device)
-
-    path = RUNS_DIR / 'guidance_models' / f'run_{conf["run_id"]}'
-   
-    if not path.exists():
-        path.mkdir(parents=True)
     
-    save_metrics(results, path / 'eval_metrics.yaml') 
-    save_model(guidance_model, path / 'guidance_model.pth')
+    if index: 
+        writeout = RUNS_DIR / 'guidance_models' / f'run_{conf["run_id"]}'
+   
+    if not writeout.exists():
+        writeout.mkdir(parents=True)
+    
+    save_metrics(results, writeout / 'eval_metrics.yaml') 
+    save_model(guidance_model, writeout / 'guidance_model.pth')
 

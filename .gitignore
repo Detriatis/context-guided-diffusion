@@ -35,3 +35,4 @@ small_molecules/scorer/test_qvina02.sh
 
 # git ignore code for Swiss Role
 !swiss_roll/runs/guidance_models/*/*.yaml
+swiss_roll/conf/batched_configs/*
