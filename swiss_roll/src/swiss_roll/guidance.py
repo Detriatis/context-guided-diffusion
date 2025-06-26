@@ -4,7 +4,6 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.nn import GaussianNLLLoss
 
-import psutil 
 import yaml
 import argparse
 from pathlib import Path 
@@ -93,22 +92,22 @@ def cgd_regularization_term(
     num_output_dims = model_predictions.shape[-1]
     
     mean_preds = model_predictions[:, :(num_output_dims // 2):]
-    var_preds = model_predictions[:, (num_output_dims // 2):]
+    logvar_preds = model_predictions[:, (num_output_dims // 2):]
 
     mean_target = torch.ones_like(mean_preds) * target_mean_hyper
-    var_target = torch.ones_like(var_preds) * target_logvar_hyper 
+    var_target = torch.ones_like(logvar_preds) * target_logvar_hyper 
     
     means_likelihood = MultivariateNormal(mean_target.T, K)
-    vars_likelihood = MultivariateNormal(var_target.T, K)
+    logvars_likelihood = MultivariateNormal(var_target.T, K)
 
     mean_log_p = means_likelihood.log_prob(mean_preds.T)
-    var_log_p =  vars_likelihood.log_prob(var_preds.T)
+    logvar_log_p =  logvars_likelihood.log_prob(logvar_preds.T)
     
-    log_ps = torch.cat([mean_log_p, var_log_p], dim=0)
+    log_ps = torch.cat([mean_log_p, logvar_log_p], dim=0)
     return -log_ps.sum()
 
-def sample_uniform(dims, low, high):
-    return (high - low) * torch.rand(size=dims) + (low)
+def sample_uniform(dims, low, high) -> torch.Tensor:
+    return (high - low) * torch.rand(size=dims, dtype=torch.float32) + (low)
 
 def train_guidance_model(
     guidance_model, 
@@ -140,8 +139,8 @@ def train_guidance_model(
             x, y = x.to(device), y.to(device)
             x_perturbed, eps = schedular.noise(x, t) 
             preds = guidance_model(x_perturbed)
-            mu = preds[:, :1]
-            var = torch.exp(preds[:, 1:])
+            mu, logvar = preds.chunk(2, dim=-1)
+            var = torch.exp(logvar).clamp_min(1e-6) 
             
             # NLL Loss
             loss_fn = GaussianNLLLoss()
@@ -171,21 +170,22 @@ def train_guidance_model(
                 )
                 reg_scale = batch_size * len(dataloader)
                 reg /= reg_scale
+                reg = reg * (512 / ctx_size)
             else: 
                 reg = 0 
             
             # L2 Regularization
             l2 = sum((p ** 2).sum() for p in guidance_model.parameters())
-            loss = nll + l2_lambda * l2 + reg_lambda * reg 
             
+            loss = nll + l2_lambda * l2 + reg_lambda * reg 
             guidance_optimizer.zero_grad()
             loss.backward()
             guidance_optimizer.step()
-        # print(f"NLL: {nll.mean().item():.4f}, L2: {l2_lambda * l2:.4f}, Reg: {reg:.4f}")
-        # print(f"Total loss {loss:.4f}")
-        # if use_ctx: 
-        #     print(f"Predicted mean: {ctx_preds[:, 0].mean().item():.4f}", 
-        #           f"Predicted uncertainity {ctx_preds[:, 1].mean().item():.4f}")
+        print(f"NLL: {nll.mean().item():.4f}, L2: {l2_lambda * l2:.4f}, Reg: {reg:.4f}")
+        print(f"Total loss {loss:.4f}")
+        if use_ctx: 
+            print(f"Predicted mean: {ctx_preds[:, 0].mean().item():.4f}", 
+                  f"Predicted uncertainity {ctx_preds[:, 1].mean().item():.4f}")
 
 def evaluate_model(model, dataloader, device='cpu', coverage_alpha=0.05):
     model.eval()
@@ -235,23 +235,31 @@ if __name__ == '__main__':
     args = parser.parse_args()
    
     index = args.index
-    conf = Path(args.conf)
-    writeout = Path(args.writeout)
+    conf = args.conf
+    writeout = args.writeout
 
     assert (index is not None) or (conf is not None and writeout is not None), "Must provide either --index or both --conf and --writeout"
-
+    if conf is not None: 
+        conf = Path(conf)
+    if writeout is not None: 
+        writeout = Path(writeout) 
+    
     device='cpu'
     if index:
         conf = CONF_DIR / 'guidance_conf' / f'{index}.yaml'
-    
+
     with open(conf, 'r') as f:
         conf = yaml.load(f, yaml.FullLoader) 
     
-    X, Y, _, _  = load_swissroll(split=True, split_value=1) 
+    X, Y, high_X, high_Y  = load_swissroll(split=True, split_value=1) 
     X = X[:, [0, 2]]
     data = Data(X, Y)
     batch_size = 128
     dataloader = DataLoader(data, batch_size=batch_size) 
+
+    high_X = high_X[:, [0, 2]]
+    high_data = Data(high_X, high_Y)
+    high_dataloader = DataLoader(high_data, batch_size=batch_size)
 
     guidance_model = GuidanceModel(2, 32 , 2, 2)
     embedding_generator = GuidanceModel(2, 32, 2, 2)
@@ -268,24 +276,34 @@ if __name__ == '__main__':
     device='cpu'
     
     target_meanval = Y.mean().to(device)
-    # print(conf)
     target_logvar = torch.tensor([0.7], dtype=torch.float32)
-
-    ctx_set = sample_uniform((10000, 2), -2.5, 2.5)
     
+    ctx_set_size = 10_000 
+    ctx_X = sample_uniform((ctx_set_size, 2), -2.5, 2.5)
+
+    ctx_Y = target_logvar.repeat(ctx_set_size).view(-1, 1)
+    ctx_data = Data(ctx_X, ctx_Y)
+
+
     train_guidance_model(guidance_model=guidance_model, 
                          context_encoder=context_encoder, 
                          guidance_optimizer=guidance_optimiser, 
                          dataloader=dataloader, 
                          target_mean_val=target_meanval,
                          target_logvar_val=target_logvar,
-                         ctx_set=ctx_set,
+                         ctx_set=ctx_X,
                          schedular=schedular,
                          n_epochs = 100,
                          **conf,
                          device=device)
    
     results = evaluate_model(guidance_model, dataloader, device)
+    validation_results = evaluate_model(guidance_model, high_dataloader, device) 
+
+    run_metrics = {
+        'training_metrics': results,
+        'validation_metrics': validation_results
+    } 
     
     if index: 
         writeout = RUNS_DIR / 'guidance_models' / f'run_{conf["run_id"]}'
@@ -293,6 +311,6 @@ if __name__ == '__main__':
     if not writeout.exists():
         writeout.mkdir(parents=True)
     
-    save_metrics(results, writeout / 'eval_metrics.yaml') 
+    save_metrics(run_metrics, writeout / 'eval_metrics.yaml') 
     save_model(guidance_model, writeout / 'guidance_model.pth')
 
