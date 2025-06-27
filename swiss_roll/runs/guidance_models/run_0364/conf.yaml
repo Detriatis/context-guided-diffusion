@@ -1,0 +1,11 @@
+batch_size: 128
+ctx_size: 512
+l2_lambda: 0.01
+n_epochs: 100
+reg_lambda: 1
+run_id: '0364'
+sigma_t: 1
+target_logvar: 0.699999988079071
+target_meanvar: -0.3658086955547333
+tau_t: 0.001
+use_ctx: true
