@@ -149,6 +149,9 @@ def train_guidance_model(
             loss_fn = GaussianNLLLoss()
             nll = loss_fn(mu, y, var)
             # CGD Regularization
+
+            reg_scale = batch_size * len(dataloader) * y.shape[1]
+           
             if use_ctx: 
                 idx = torch.randperm(ctx_set.size(0))[:ctx_size]
                 x_ctx = ctx_set[idx]
@@ -168,7 +171,6 @@ def train_guidance_model(
                     target_logvar_hyper = target_logvar_val,
                     target_mean_hyper = target_mean_val,
                 )
-                reg_scale = batch_size * len(dataloader) * y.shape[1]
                 reg /= reg_scale
                 reg *= reg_lambda
             else: 
