@@ -268,9 +268,8 @@ if __name__ == '__main__':
     logger.info(f'PROCESS RUNNING ON {device}') 
     
     conf = load_config(conf)  
-    
-    batch_size = 128
-    n_epochs = 30 
+    logger.info(f'Starting run with conf {conf}') 
+    batch_size = conf['batch_size']
     
     X, Y, high_X, high_Y  = load_swissroll(split=True, split_value=1) 
     X = X[:, [0, 2]]
@@ -304,15 +303,12 @@ if __name__ == '__main__':
                          target_logvar_val=target_logvar,
                          ctx_set=ctx_X,
                          schedular=schedular,
-                         n_epochs = n_epochs,
                          **conf,
                          device=device)
    
     results = evaluate_model(guidance_model, dataloader, device)
     validation_results = evaluate_model(guidance_model, high_dataloader, device) 
 
-    conf['n_epochs'] = n_epochs
-    conf['batch_size'] = batch_size
     conf['target_logvar'] = target_logvar.cpu().item()
     conf['target_meanvar'] = target_meanval.cpu().item()
 
