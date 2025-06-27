@@ -1,4 +1,3 @@
-rm -r batched_configs
 mkdir batched_configs
 find guidance_conf -name "*.yaml" | sort | split -a 3 -l 20 -d - batched_configs/batch_
 
