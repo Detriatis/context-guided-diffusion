@@ -1,0 +1,602 @@
+INFO:__main__:PROCESS RUNNING ON cpu
+INFO:__main__:NLL: 0.0149, L2: 0.0246, Reg: 0.0135
+INFO:__main__:Total loss 0.0531
+INFO:__main__:Predicted mean: -0.4263
+INFO:__main__:Predicted uncertainity -0.7968
+INFO:__main__:Completed epoch 1 of 100
+
+INFO:__main__:NLL: 0.1281, L2: 0.0241, Reg: 0.0134
+INFO:__main__:Total loss 0.1656
+INFO:__main__:Predicted mean: -0.3927
+INFO:__main__:Predicted uncertainity -0.7576
+INFO:__main__:Completed epoch 2 of 100
+
+INFO:__main__:NLL: 0.1677, L2: 0.0262, Reg: 0.0134
+INFO:__main__:Total loss 0.2073
+INFO:__main__:Predicted mean: -0.3559
+INFO:__main__:Predicted uncertainity -0.7443
+INFO:__main__:Completed epoch 3 of 100
+
+INFO:__main__:NLL: -0.0756, L2: 0.0252, Reg: 0.0135
+INFO:__main__:Total loss -0.0369
+INFO:__main__:Predicted mean: -0.4268
+INFO:__main__:Predicted uncertainity -0.8031
+INFO:__main__:Completed epoch 4 of 100
+
+INFO:__main__:NLL: 0.0786, L2: 0.0261, Reg: 0.0133
+INFO:__main__:Total loss 0.1181
+INFO:__main__:Predicted mean: -0.3315
+INFO:__main__:Predicted uncertainity -0.8172
+INFO:__main__:Completed epoch 5 of 100
+
+INFO:__main__:NLL: -0.0262, L2: 0.0264, Reg: 0.0133
+INFO:__main__:Total loss 0.0135
+INFO:__main__:Predicted mean: -0.3757
+INFO:__main__:Predicted uncertainity -0.6503
+INFO:__main__:Completed epoch 6 of 100
+
+INFO:__main__:NLL: -0.0705, L2: 0.0262, Reg: 0.0133
+INFO:__main__:Total loss -0.0310
+INFO:__main__:Predicted mean: -0.3540
+INFO:__main__:Predicted uncertainity -0.7154
+INFO:__main__:Completed epoch 7 of 100
+
+INFO:__main__:NLL: 0.3033, L2: 0.0281, Reg: 0.0137
+INFO:__main__:Total loss 0.3451
+INFO:__main__:Predicted mean: -0.4456
+INFO:__main__:Predicted uncertainity -0.8750
+INFO:__main__:Completed epoch 8 of 100
+
+INFO:__main__:NLL: 0.0936, L2: 0.0269, Reg: 0.0135
+INFO:__main__:Total loss 0.1340
+INFO:__main__:Predicted mean: -0.4445
+INFO:__main__:Predicted uncertainity -0.8741
+INFO:__main__:Completed epoch 9 of 100
+
+INFO:__main__:NLL: 0.2132, L2: 0.0275, Reg: 0.0133
+INFO:__main__:Total loss 0.2540
+INFO:__main__:Predicted mean: -0.3395
+INFO:__main__:Predicted uncertainity -0.7062
+INFO:__main__:Completed epoch 10 of 100
+
+INFO:__main__:NLL: 0.0730, L2: 0.0268, Reg: 0.0134
+INFO:__main__:Total loss 0.1132
+INFO:__main__:Predicted mean: -0.4099
+INFO:__main__:Predicted uncertainity -0.7823
+INFO:__main__:Completed epoch 11 of 100
+
+INFO:__main__:NLL: 0.1580, L2: 0.0255, Reg: 0.0133
+INFO:__main__:Total loss 0.1968
+INFO:__main__:Predicted mean: -0.4722
+INFO:__main__:Predicted uncertainity -0.7158
+INFO:__main__:Completed epoch 12 of 100
+
+INFO:__main__:NLL: 0.0513, L2: 0.0266, Reg: 0.0133
+INFO:__main__:Total loss 0.0913
+INFO:__main__:Predicted mean: -0.3859
+INFO:__main__:Predicted uncertainity -0.7188
+INFO:__main__:Completed epoch 13 of 100
+
+INFO:__main__:NLL: 0.1001, L2: 0.0246, Reg: 0.0133
+INFO:__main__:Total loss 0.1381
+INFO:__main__:Predicted mean: -0.3711
+INFO:__main__:Predicted uncertainity -0.7405
+INFO:__main__:Completed epoch 14 of 100
+
+INFO:__main__:NLL: 0.0611, L2: 0.0254, Reg: 0.0134
+INFO:__main__:Total loss 0.0998
+INFO:__main__:Predicted mean: -0.3319
+INFO:__main__:Predicted uncertainity -0.8236
+INFO:__main__:Completed epoch 15 of 100
+
+INFO:__main__:NLL: 0.1452, L2: 0.0262, Reg: 0.0134
+INFO:__main__:Total loss 0.1848
+INFO:__main__:Predicted mean: -0.3845
+INFO:__main__:Predicted uncertainity -0.7737
+INFO:__main__:Completed epoch 16 of 100
+
+INFO:__main__:NLL: 0.0486, L2: 0.0287, Reg: 0.0134
+INFO:__main__:Total loss 0.0906
+INFO:__main__:Predicted mean: -0.3748
+INFO:__main__:Predicted uncertainity -0.8216
+INFO:__main__:Completed epoch 17 of 100
+
+INFO:__main__:NLL: 0.1360, L2: 0.0288, Reg: 0.0135
+INFO:__main__:Total loss 0.1783
+INFO:__main__:Predicted mean: -0.3488
+INFO:__main__:Predicted uncertainity -0.8225
+INFO:__main__:Completed epoch 18 of 100
+
+INFO:__main__:NLL: 0.0579, L2: 0.0273, Reg: 0.0134
+INFO:__main__:Total loss 0.0987
+INFO:__main__:Predicted mean: -0.4267
+INFO:__main__:Predicted uncertainity -0.7958
+INFO:__main__:Completed epoch 19 of 100
+
+INFO:__main__:NLL: 0.0393, L2: 0.0273, Reg: 0.0134
+INFO:__main__:Total loss 0.0800
+INFO:__main__:Predicted mean: -0.3861
+INFO:__main__:Predicted uncertainity -0.7596
+INFO:__main__:Completed epoch 20 of 100
+
+INFO:__main__:NLL: 0.0980, L2: 0.0262, Reg: 0.0132
+INFO:__main__:Total loss 0.1375
+INFO:__main__:Predicted mean: -0.3792
+INFO:__main__:Predicted uncertainity -0.5894
+INFO:__main__:Completed epoch 21 of 100
+
+INFO:__main__:NLL: -0.0267, L2: 0.0254, Reg: 0.0133
+INFO:__main__:Total loss 0.0121
+INFO:__main__:Predicted mean: -0.4136
+INFO:__main__:Predicted uncertainity -0.7581
+INFO:__main__:Completed epoch 22 of 100
+
+INFO:__main__:NLL: 0.3350, L2: 0.0275, Reg: 0.0135
+INFO:__main__:Total loss 0.3760
+INFO:__main__:Predicted mean: -0.3921
+INFO:__main__:Predicted uncertainity -0.8508
+INFO:__main__:Completed epoch 23 of 100
+
+INFO:__main__:NLL: 0.1151, L2: 0.0256, Reg: 0.0134
+INFO:__main__:Total loss 0.1541
+INFO:__main__:Predicted mean: -0.3814
+INFO:__main__:Predicted uncertainity -0.6159
+INFO:__main__:Completed epoch 24 of 100
+
+INFO:__main__:NLL: 0.1122, L2: 0.0273, Reg: 0.0133
+INFO:__main__:Total loss 0.1528
+INFO:__main__:Predicted mean: -0.3385
+INFO:__main__:Predicted uncertainity -0.7210
+INFO:__main__:Completed epoch 25 of 100
+
+INFO:__main__:NLL: 0.2077, L2: 0.0276, Reg: 0.0135
+INFO:__main__:Total loss 0.2489
+INFO:__main__:Predicted mean: -0.3589
+INFO:__main__:Predicted uncertainity -0.6750
+INFO:__main__:Completed epoch 26 of 100
+
+INFO:__main__:NLL: 0.0734, L2: 0.0256, Reg: 0.0133
+INFO:__main__:Total loss 0.1123
+INFO:__main__:Predicted mean: -0.3216
+INFO:__main__:Predicted uncertainity -0.6636
+INFO:__main__:Completed epoch 27 of 100
+
+INFO:__main__:NLL: 0.0748, L2: 0.0266, Reg: 0.0135
+INFO:__main__:Total loss 0.1149
+INFO:__main__:Predicted mean: -0.3552
+INFO:__main__:Predicted uncertainity -0.8253
+INFO:__main__:Completed epoch 28 of 100
+
+INFO:__main__:NLL: 0.0982, L2: 0.0267, Reg: 0.0134
+INFO:__main__:Total loss 0.1383
+INFO:__main__:Predicted mean: -0.3903
+INFO:__main__:Predicted uncertainity -0.7396
+INFO:__main__:Completed epoch 29 of 100
+
+INFO:__main__:NLL: 0.1147, L2: 0.0259, Reg: 0.0133
+INFO:__main__:Total loss 0.1539
+INFO:__main__:Predicted mean: -0.3585
+INFO:__main__:Predicted uncertainity -0.7079
+INFO:__main__:Completed epoch 30 of 100
+
+INFO:__main__:NLL: -0.0945, L2: 0.0272, Reg: 0.0135
+INFO:__main__:Total loss -0.0538
+INFO:__main__:Predicted mean: -0.3710
+INFO:__main__:Predicted uncertainity -0.7998
+INFO:__main__:Completed epoch 31 of 100
+
+INFO:__main__:NLL: 0.0671, L2: 0.0269, Reg: 0.0134
+INFO:__main__:Total loss 0.1073
+INFO:__main__:Predicted mean: -0.3708
+INFO:__main__:Predicted uncertainity -0.7995
+INFO:__main__:Completed epoch 32 of 100
+
+INFO:__main__:NLL: 0.1552, L2: 0.0273, Reg: 0.0133
+INFO:__main__:Total loss 0.1958
+INFO:__main__:Predicted mean: -0.3861
+INFO:__main__:Predicted uncertainity -0.7560
+INFO:__main__:Completed epoch 33 of 100
+
+INFO:__main__:NLL: 0.1798, L2: 0.0265, Reg: 0.0134
+INFO:__main__:Total loss 0.2197
+INFO:__main__:Predicted mean: -0.3797
+INFO:__main__:Predicted uncertainity -0.7302
+INFO:__main__:Completed epoch 34 of 100
+
+INFO:__main__:NLL: 0.0903, L2: 0.0276, Reg: 0.0133
+INFO:__main__:Total loss 0.1311
+INFO:__main__:Predicted mean: -0.3642
+INFO:__main__:Predicted uncertainity -0.7376
+INFO:__main__:Completed epoch 35 of 100
+
+INFO:__main__:NLL: 0.0573, L2: 0.0283, Reg: 0.0134
+INFO:__main__:Total loss 0.0990
+INFO:__main__:Predicted mean: -0.3318
+INFO:__main__:Predicted uncertainity -0.7353
+INFO:__main__:Completed epoch 36 of 100
+
+INFO:__main__:NLL: 0.2752, L2: 0.0293, Reg: 0.0133
+INFO:__main__:Total loss 0.3178
+INFO:__main__:Predicted mean: -0.4106
+INFO:__main__:Predicted uncertainity -0.6308
+INFO:__main__:Completed epoch 37 of 100
+
+INFO:__main__:NLL: -0.0857, L2: 0.0284, Reg: 0.0134
+INFO:__main__:Total loss -0.0439
+INFO:__main__:Predicted mean: -0.3358
+INFO:__main__:Predicted uncertainity -0.7812
+INFO:__main__:Completed epoch 38 of 100
+
+INFO:__main__:NLL: 0.0600, L2: 0.0268, Reg: 0.0135
+INFO:__main__:Total loss 0.1003
+INFO:__main__:Predicted mean: -0.4187
+INFO:__main__:Predicted uncertainity -0.8946
+INFO:__main__:Completed epoch 39 of 100
+
+INFO:__main__:NLL: 0.0441, L2: 0.0258, Reg: 0.0133
+INFO:__main__:Total loss 0.0832
+INFO:__main__:Predicted mean: -0.3905
+INFO:__main__:Predicted uncertainity -0.6305
+INFO:__main__:Completed epoch 40 of 100
+
+INFO:__main__:NLL: 0.0819, L2: 0.0278, Reg: 0.0134
+INFO:__main__:Total loss 0.1231
+INFO:__main__:Predicted mean: -0.3329
+INFO:__main__:Predicted uncertainity -0.6964
+INFO:__main__:Completed epoch 41 of 100
+
+INFO:__main__:NLL: 0.4042, L2: 0.0260, Reg: 0.0133
+INFO:__main__:Total loss 0.4434
+INFO:__main__:Predicted mean: -0.3926
+INFO:__main__:Predicted uncertainity -0.7231
+INFO:__main__:Completed epoch 42 of 100
+
+INFO:__main__:NLL: 0.0418, L2: 0.0279, Reg: 0.0134
+INFO:__main__:Total loss 0.0831
+INFO:__main__:Predicted mean: -0.3474
+INFO:__main__:Predicted uncertainity -0.6999
+INFO:__main__:Completed epoch 43 of 100
+
+INFO:__main__:NLL: 0.0636, L2: 0.0261, Reg: 0.0135
+INFO:__main__:Total loss 0.1032
+INFO:__main__:Predicted mean: -0.3897
+INFO:__main__:Predicted uncertainity -0.7871
+INFO:__main__:Completed epoch 44 of 100
+
+INFO:__main__:NLL: 0.2678, L2: 0.0269, Reg: 0.0135
+INFO:__main__:Total loss 0.3082
+INFO:__main__:Predicted mean: -0.3348
+INFO:__main__:Predicted uncertainity -0.7058
+INFO:__main__:Completed epoch 45 of 100
+
+INFO:__main__:NLL: 0.1279, L2: 0.0257, Reg: 0.0133
+INFO:__main__:Total loss 0.1670
+INFO:__main__:Predicted mean: -0.3443
+INFO:__main__:Predicted uncertainity -0.6488
+INFO:__main__:Completed epoch 46 of 100
+
+INFO:__main__:NLL: 0.0456, L2: 0.0250, Reg: 0.0134
+INFO:__main__:Total loss 0.0840
+INFO:__main__:Predicted mean: -0.4202
+INFO:__main__:Predicted uncertainity -0.7437
+INFO:__main__:Completed epoch 47 of 100
+
+INFO:__main__:NLL: 0.3183, L2: 0.0275, Reg: 0.0134
+INFO:__main__:Total loss 0.3592
+INFO:__main__:Predicted mean: -0.3966
+INFO:__main__:Predicted uncertainity -0.6746
+INFO:__main__:Completed epoch 48 of 100
+
+INFO:__main__:NLL: -0.0591, L2: 0.0261, Reg: 0.0136
+INFO:__main__:Total loss -0.0194
+INFO:__main__:Predicted mean: -0.3789
+INFO:__main__:Predicted uncertainity -0.8626
+INFO:__main__:Completed epoch 49 of 100
+
+INFO:__main__:NLL: 0.0501, L2: 0.0234, Reg: 0.0133
+INFO:__main__:Total loss 0.0868
+INFO:__main__:Predicted mean: -0.3814
+INFO:__main__:Predicted uncertainity -0.7264
+INFO:__main__:Completed epoch 50 of 100
+
+INFO:__main__:NLL: 0.1506, L2: 0.0248, Reg: 0.0136
+INFO:__main__:Total loss 0.1890
+INFO:__main__:Predicted mean: -0.3996
+INFO:__main__:Predicted uncertainity -0.8586
+INFO:__main__:Completed epoch 51 of 100
+
+INFO:__main__:NLL: 0.1216, L2: 0.0260, Reg: 0.0135
+INFO:__main__:Total loss 0.1611
+INFO:__main__:Predicted mean: -0.3771
+INFO:__main__:Predicted uncertainity -0.7282
+INFO:__main__:Completed epoch 52 of 100
+
+INFO:__main__:NLL: 0.2132, L2: 0.0258, Reg: 0.0133
+INFO:__main__:Total loss 0.2523
+INFO:__main__:Predicted mean: -0.3946
+INFO:__main__:Predicted uncertainity -0.6853
+INFO:__main__:Completed epoch 53 of 100
+
+INFO:__main__:NLL: 0.0767, L2: 0.0254, Reg: 0.0134
+INFO:__main__:Total loss 0.1154
+INFO:__main__:Predicted mean: -0.3328
+INFO:__main__:Predicted uncertainity -0.7083
+INFO:__main__:Completed epoch 54 of 100
+
+INFO:__main__:NLL: 0.0510, L2: 0.0272, Reg: 0.0134
+INFO:__main__:Total loss 0.0916
+INFO:__main__:Predicted mean: -0.3593
+INFO:__main__:Predicted uncertainity -0.7970
+INFO:__main__:Completed epoch 55 of 100
+
+INFO:__main__:NLL: 0.0809, L2: 0.0288, Reg: 0.0133
+INFO:__main__:Total loss 0.1230
+INFO:__main__:Predicted mean: -0.4395
+INFO:__main__:Predicted uncertainity -0.6852
+INFO:__main__:Completed epoch 56 of 100
+
+INFO:__main__:NLL: 0.1623, L2: 0.0261, Reg: 0.0134
+INFO:__main__:Total loss 0.2017
+INFO:__main__:Predicted mean: -0.3516
+INFO:__main__:Predicted uncertainity -0.8127
+INFO:__main__:Completed epoch 57 of 100
+
+INFO:__main__:NLL: 0.1665, L2: 0.0277, Reg: 0.0136
+INFO:__main__:Total loss 0.2078
+INFO:__main__:Predicted mean: -0.4076
+INFO:__main__:Predicted uncertainity -0.8005
+INFO:__main__:Completed epoch 58 of 100
+
+INFO:__main__:NLL: 0.1087, L2: 0.0294, Reg: 0.0136
+INFO:__main__:Total loss 0.1517
+INFO:__main__:Predicted mean: -0.3468
+INFO:__main__:Predicted uncertainity -0.7296
+INFO:__main__:Completed epoch 59 of 100
+
+INFO:__main__:NLL: 0.1498, L2: 0.0277, Reg: 0.0132
+INFO:__main__:Total loss 0.1907
+INFO:__main__:Predicted mean: -0.4113
+INFO:__main__:Predicted uncertainity -0.5974
+INFO:__main__:Completed epoch 60 of 100
+
+INFO:__main__:NLL: 0.0320, L2: 0.0271, Reg: 0.0134
+INFO:__main__:Total loss 0.0725
+INFO:__main__:Predicted mean: -0.3432
+INFO:__main__:Predicted uncertainity -0.7436
+INFO:__main__:Completed epoch 61 of 100
+
+INFO:__main__:NLL: 0.1619, L2: 0.0259, Reg: 0.0133
+INFO:__main__:Total loss 0.2012
+INFO:__main__:Predicted mean: -0.3602
+INFO:__main__:Predicted uncertainity -0.7476
+INFO:__main__:Completed epoch 62 of 100
+
+INFO:__main__:NLL: 0.0831, L2: 0.0250, Reg: 0.0137
+INFO:__main__:Total loss 0.1218
+INFO:__main__:Predicted mean: -0.3597
+INFO:__main__:Predicted uncertainity -0.8176
+INFO:__main__:Completed epoch 63 of 100
+
+INFO:__main__:NLL: 0.1782, L2: 0.0285, Reg: 0.0135
+INFO:__main__:Total loss 0.2202
+INFO:__main__:Predicted mean: -0.3783
+INFO:__main__:Predicted uncertainity -0.7809
+INFO:__main__:Completed epoch 64 of 100
+
+INFO:__main__:NLL: -0.0529, L2: 0.0274, Reg: 0.0135
+INFO:__main__:Total loss -0.0121
+INFO:__main__:Predicted mean: -0.4023
+INFO:__main__:Predicted uncertainity -0.7908
+INFO:__main__:Completed epoch 65 of 100
+
+INFO:__main__:NLL: 0.1098, L2: 0.0239, Reg: 0.0134
+INFO:__main__:Total loss 0.1471
+INFO:__main__:Predicted mean: -0.3773
+INFO:__main__:Predicted uncertainity -0.7343
+INFO:__main__:Completed epoch 66 of 100
+
+INFO:__main__:NLL: 0.0709, L2: 0.0255, Reg: 0.0135
+INFO:__main__:Total loss 0.1099
+INFO:__main__:Predicted mean: -0.4260
+INFO:__main__:Predicted uncertainity -0.7971
+INFO:__main__:Completed epoch 67 of 100
+
+INFO:__main__:NLL: 0.0628, L2: 0.0250, Reg: 0.0134
+INFO:__main__:Total loss 0.1012
+INFO:__main__:Predicted mean: -0.3502
+INFO:__main__:Predicted uncertainity -0.7481
+INFO:__main__:Completed epoch 68 of 100
+
+INFO:__main__:NLL: 0.0410, L2: 0.0244, Reg: 0.0134
+INFO:__main__:Total loss 0.0788
+INFO:__main__:Predicted mean: -0.3520
+INFO:__main__:Predicted uncertainity -0.7738
+INFO:__main__:Completed epoch 69 of 100
+
+INFO:__main__:NLL: 0.0194, L2: 0.0260, Reg: 0.0132
+INFO:__main__:Total loss 0.0585
+INFO:__main__:Predicted mean: -0.3256
+INFO:__main__:Predicted uncertainity -0.7125
+INFO:__main__:Completed epoch 70 of 100
+
+INFO:__main__:NLL: 0.1193, L2: 0.0258, Reg: 0.0133
+INFO:__main__:Total loss 0.1585
+INFO:__main__:Predicted mean: -0.3260
+INFO:__main__:Predicted uncertainity -0.7251
+INFO:__main__:Completed epoch 71 of 100
+
+INFO:__main__:NLL: 0.0229, L2: 0.0248, Reg: 0.0134
+INFO:__main__:Total loss 0.0612
+INFO:__main__:Predicted mean: -0.3753
+INFO:__main__:Predicted uncertainity -0.8277
+INFO:__main__:Completed epoch 72 of 100
+
+INFO:__main__:NLL: 0.0033, L2: 0.0279, Reg: 0.0133
+INFO:__main__:Total loss 0.0445
+INFO:__main__:Predicted mean: -0.3562
+INFO:__main__:Predicted uncertainity -0.7475
+INFO:__main__:Completed epoch 73 of 100
+
+INFO:__main__:NLL: 0.0289, L2: 0.0287, Reg: 0.0134
+INFO:__main__:Total loss 0.0710
+INFO:__main__:Predicted mean: -0.3912
+INFO:__main__:Predicted uncertainity -0.9053
+INFO:__main__:Completed epoch 74 of 100
+
+INFO:__main__:NLL: 0.1139, L2: 0.0270, Reg: 0.0133
+INFO:__main__:Total loss 0.1541
+INFO:__main__:Predicted mean: -0.3924
+INFO:__main__:Predicted uncertainity -0.6724
+INFO:__main__:Completed epoch 75 of 100
+
+INFO:__main__:NLL: 0.0887, L2: 0.0297, Reg: 0.0133
+INFO:__main__:Total loss 0.1317
+INFO:__main__:Predicted mean: -0.4084
+INFO:__main__:Predicted uncertainity -0.6766
+INFO:__main__:Completed epoch 76 of 100
+
+INFO:__main__:NLL: 0.1519, L2: 0.0285, Reg: 0.0133
+INFO:__main__:Total loss 0.1937
+INFO:__main__:Predicted mean: -0.3644
+INFO:__main__:Predicted uncertainity -0.6207
+INFO:__main__:Completed epoch 77 of 100
+
+INFO:__main__:NLL: 0.0166, L2: 0.0265, Reg: 0.0134
+INFO:__main__:Total loss 0.0565
+INFO:__main__:Predicted mean: -0.4409
+INFO:__main__:Predicted uncertainity -0.7221
+INFO:__main__:Completed epoch 78 of 100
+
+INFO:__main__:NLL: 0.0749, L2: 0.0294, Reg: 0.0134
+INFO:__main__:Total loss 0.1178
+INFO:__main__:Predicted mean: -0.3760
+INFO:__main__:Predicted uncertainity -0.6716
+INFO:__main__:Completed epoch 79 of 100
+
+INFO:__main__:NLL: 0.0867, L2: 0.0289, Reg: 0.0135
+INFO:__main__:Total loss 0.1292
+INFO:__main__:Predicted mean: -0.4123
+INFO:__main__:Predicted uncertainity -0.6715
+INFO:__main__:Completed epoch 80 of 100
+
+INFO:__main__:NLL: 0.0742, L2: 0.0270, Reg: 0.0133
+INFO:__main__:Total loss 0.1144
+INFO:__main__:Predicted mean: -0.3343
+INFO:__main__:Predicted uncertainity -0.7334
+INFO:__main__:Completed epoch 81 of 100
+
+INFO:__main__:NLL: 0.1102, L2: 0.0271, Reg: 0.0133
+INFO:__main__:Total loss 0.1506
+INFO:__main__:Predicted mean: -0.3457
+INFO:__main__:Predicted uncertainity -0.6941
+INFO:__main__:Completed epoch 82 of 100
+
+INFO:__main__:NLL: 0.2328, L2: 0.0272, Reg: 0.0132
+INFO:__main__:Total loss 0.2733
+INFO:__main__:Predicted mean: -0.4412
+INFO:__main__:Predicted uncertainity -0.7356
+INFO:__main__:Completed epoch 83 of 100
+
+INFO:__main__:NLL: -0.0021, L2: 0.0274, Reg: 0.0132
+INFO:__main__:Total loss 0.0385
+INFO:__main__:Predicted mean: -0.4221
+INFO:__main__:Predicted uncertainity -0.6232
+INFO:__main__:Completed epoch 84 of 100
+
+INFO:__main__:NLL: 0.1699, L2: 0.0256, Reg: 0.0135
+INFO:__main__:Total loss 0.2090
+INFO:__main__:Predicted mean: -0.3416
+INFO:__main__:Predicted uncertainity -0.7709
+INFO:__main__:Completed epoch 85 of 100
+
+INFO:__main__:NLL: 0.0415, L2: 0.0276, Reg: 0.0135
+INFO:__main__:Total loss 0.0826
+INFO:__main__:Predicted mean: -0.3510
+INFO:__main__:Predicted uncertainity -0.7742
+INFO:__main__:Completed epoch 86 of 100
+
+INFO:__main__:NLL: 0.0448, L2: 0.0253, Reg: 0.0135
+INFO:__main__:Total loss 0.0836
+INFO:__main__:Predicted mean: -0.4194
+INFO:__main__:Predicted uncertainity -0.7351
+INFO:__main__:Completed epoch 87 of 100
+
+INFO:__main__:NLL: 0.1503, L2: 0.0272, Reg: 0.0133
+INFO:__main__:Total loss 0.1909
+INFO:__main__:Predicted mean: -0.3527
+INFO:__main__:Predicted uncertainity -0.7446
+INFO:__main__:Completed epoch 88 of 100
+
+INFO:__main__:NLL: 0.3542, L2: 0.0260, Reg: 0.0132
+INFO:__main__:Total loss 0.3934
+INFO:__main__:Predicted mean: -0.3479
+INFO:__main__:Predicted uncertainity -0.7443
+INFO:__main__:Completed epoch 89 of 100
+
+INFO:__main__:NLL: 0.0913, L2: 0.0273, Reg: 0.0134
+INFO:__main__:Total loss 0.1320
+INFO:__main__:Predicted mean: -0.3295
+INFO:__main__:Predicted uncertainity -0.6954
+INFO:__main__:Completed epoch 90 of 100
+
+INFO:__main__:NLL: 0.1251, L2: 0.0287, Reg: 0.0134
+INFO:__main__:Total loss 0.1672
+INFO:__main__:Predicted mean: -0.3236
+INFO:__main__:Predicted uncertainity -0.6951
+INFO:__main__:Completed epoch 91 of 100
+
+INFO:__main__:NLL: 0.0166, L2: 0.0279, Reg: 0.0136
+INFO:__main__:Total loss 0.0582
+INFO:__main__:Predicted mean: -0.3654
+INFO:__main__:Predicted uncertainity -0.7487
+INFO:__main__:Completed epoch 92 of 100
+
+INFO:__main__:NLL: 0.2388, L2: 0.0258, Reg: 0.0134
+INFO:__main__:Total loss 0.2780
+INFO:__main__:Predicted mean: -0.3808
+INFO:__main__:Predicted uncertainity -0.7839
+INFO:__main__:Completed epoch 93 of 100
+
+INFO:__main__:NLL: 0.2413, L2: 0.0276, Reg: 0.0135
+INFO:__main__:Total loss 0.2824
+INFO:__main__:Predicted mean: -0.3773
+INFO:__main__:Predicted uncertainity -0.8152
+INFO:__main__:Completed epoch 94 of 100
+
+INFO:__main__:NLL: 0.1351, L2: 0.0258, Reg: 0.0134
+INFO:__main__:Total loss 0.1743
+INFO:__main__:Predicted mean: -0.3613
+INFO:__main__:Predicted uncertainity -0.7384
+INFO:__main__:Completed epoch 95 of 100
+
+INFO:__main__:NLL: 0.1865, L2: 0.0285, Reg: 0.0134
+INFO:__main__:Total loss 0.2284
+INFO:__main__:Predicted mean: -0.3586
+INFO:__main__:Predicted uncertainity -0.7577
+INFO:__main__:Completed epoch 96 of 100
+
+INFO:__main__:NLL: 0.1980, L2: 0.0279, Reg: 0.0135
+INFO:__main__:Total loss 0.2393
+INFO:__main__:Predicted mean: -0.3643
+INFO:__main__:Predicted uncertainity -0.7427
+INFO:__main__:Completed epoch 97 of 100
+
+INFO:__main__:NLL: 0.0086, L2: 0.0290, Reg: 0.0134
+INFO:__main__:Total loss 0.0510
+INFO:__main__:Predicted mean: -0.3281
+INFO:__main__:Predicted uncertainity -0.7940
+INFO:__main__:Completed epoch 98 of 100
+
+INFO:__main__:NLL: -0.0455, L2: 0.0290, Reg: 0.0136
+INFO:__main__:Total loss -0.0028
+INFO:__main__:Predicted mean: -0.3885
+INFO:__main__:Predicted uncertainity -0.8343
+INFO:__main__:Completed epoch 99 of 100
+
+INFO:__main__:NLL: 0.2294, L2: 0.0277, Reg: 0.0134
+INFO:__main__:Total loss 0.2705
+INFO:__main__:Predicted mean: -0.3946
+INFO:__main__:Predicted uncertainity -0.8594
+INFO:__main__:Completed epoch 100 of 100
+
+INFO:__main__:760.554106 s
