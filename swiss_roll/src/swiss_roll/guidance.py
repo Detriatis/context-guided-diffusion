@@ -60,9 +60,9 @@ class GuidanceModel(nn.Module):
         x = self.inlayer(x)
         for layer in self.midlayer: 
             x = layer(x)
-
+        embed = x 
         x = self.outlayer(x) 
-        return x
+        return x, embed
     
 class ContextEmbedding(nn.Module):
     def __init__(self, input_dim=2, embedding_dim=32):
@@ -141,7 +141,7 @@ def train_guidance_model(
             t = schedular.randtimesteps(x)
             x_perturbed, eps = schedular.noise(x, t) 
            
-            preds = guidance_model(x_perturbed)
+            preds, embed = guidance_model(x_perturbed)
             mu, logvar = preds.chunk(2, dim=-1)
             var = torch.exp(logvar).clamp_min(1e-6) 
             
@@ -157,10 +157,9 @@ def train_guidance_model(
                 x_ctx_perturbed, ctx_eps = schedular.noise(x_ctx, t)
 
                 with torch.no_grad():
-                    ctx_embeds = context_encoder(x_ctx_perturbed)
-                
-                ctx_preds = guidance_model(x_ctx_perturbed)
-                
+                    _, ctx_embeds = context_encoder(x_ctx_perturbed)
+
+                ctx_preds, _ = guidance_model(x_ctx_perturbed) 
                 reg = cgd_regularization_term(
                     model_predictions = ctx_preds,
                     context_embeddings = ctx_embeds,
@@ -171,16 +170,17 @@ def train_guidance_model(
                 )
                 reg_scale = batch_size * len(dataloader) * y.shape[1]
                 reg /= reg_scale
-                reg = reg * (512 / ctx_size)
+                reg *= reg_lambda
             else: 
                 reg = 0
                 reg_lambda = 0 
             
             # L2 Regularization
             l2 = sum((p ** 2).sum() for p in guidance_model.parameters())
-            l2 = (1 / (2 * l2_lambda)) * l2 / reg_scale 
+            l2 = ((1 / (2 * l2_lambda)) * l2) / reg_scale 
             
-            loss = nll + l2 + reg_lambda * reg 
+            loss = nll + l2 + reg 
+            
             guidance_optimizer.zero_grad()
             loss.backward()
             guidance_optimizer.step()
@@ -189,7 +189,7 @@ def train_guidance_model(
         logger.info(f"Total loss {loss:.4f}")
         if use_ctx: 
             logger.info(f"Predicted mean: {ctx_preds[:, 0].mean().item():.4f}") 
-            logger.info(f"Predicted uncertainity {ctx_preds[:, 1].mean().item():.4f}")
+            logger.info(f"Predicted uncertainity {ctx_preds[:, 1].exp().mean().item():.4f}")
         logger.info(f"Completed epoch {epoch+1} of {n_epochs}\n")
 
 def evaluate_model(model, dataloader, device='cpu', coverage_alpha=0.05):
@@ -201,7 +201,7 @@ def evaluate_model(model, dataloader, device='cpu', coverage_alpha=0.05):
     with torch.no_grad():
         for x, y in dataloader:
             x, y = x.to(device), y.to(device)
-            preds = model(x)
+            preds, _ = model(x)
             mu = preds[:, :1]
             var = torch.exp(preds[:, 1:])
             std = var.sqrt()
@@ -268,7 +268,7 @@ if __name__ == '__main__':
     conf = load_config(conf)  
     
     batch_size = 128
-    n_epochs = 100 
+    n_epochs = 30 
     
     X, Y, high_X, high_Y  = load_swissroll(split=True, split_value=1) 
     X = X[:, [0, 2]]
@@ -281,17 +281,9 @@ if __name__ == '__main__':
     
     guidance_model = GuidanceModel(2, 32 , 2, 2).to(device)
 
-    embedding_generator = GuidanceModel(2, 32, 2, 2).to(device)
-    
-    for param in embedding_generator.parameters():
-        param.requires_grad = False 
-
-    def context_encoder(x):
-        h=embedding_generator.inlayer(x)
-        for layer in embedding_generator.midlayer:
-            h=layer(h)
-        return h
-    
+    context_encoder = GuidanceModel(2, 32, 2, 2).to(device)
+    context_encoder.eval() 
+   
     schedular = Schedular(device=device)
     
     guidance_optimiser = optim.Adam(guidance_model.parameters(), 1e-2)
