@@ -1,8 +1,0 @@
-training_metrics:
-  95%_coverage: 1.0
-  mse: 0.7514480891472765
-  nll: 1.2961456507437201
-validation_metrics:
-  95%_coverage: 1.0
-  mse: 1.92791535964799
-  nll: 1.8775215401662337
