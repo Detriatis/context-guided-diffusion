@@ -173,12 +173,14 @@ def train_guidance_model(
                 reg /= reg_scale
                 reg = reg * (512 / ctx_size)
             else: 
-                reg = 0 
+                reg = 0
+                reg_lambda = 0 
             
             # L2 Regularization
             l2 = sum((p ** 2).sum() for p in guidance_model.parameters())
             
-            loss = nll + l2_lambda * l2 + reg_lambda * reg 
+            loss = nll + l2_lambda * l2 + (0.5 * reg_lambda) * reg 
+            
             guidance_optimizer.zero_grad()
             loss.backward()
             guidance_optimizer.step()
@@ -276,11 +278,13 @@ if __name__ == '__main__':
     high_X = high_X[:, [0, 2]]
     high_data = Data(high_X, high_Y)
     high_dataloader = DataLoader(high_data, batch_size=batch_size)
-
     
     guidance_model = GuidanceModel(2, 32 , 2, 2).to(device)
+
     embedding_generator = GuidanceModel(2, 32, 2, 2).to(device)
-   
+    for param in embedding_generator.parameters():
+        param.requires_grad=False 
+
     def context_encoder(x):
         h=embedding_generator.inlayer(x)
         for layer in embedding_generator.midlayer:
