@@ -40,7 +40,7 @@ for CONF in ${TMPDIR}/batch_${BATCH_ID}/conf/*.yaml; do
         --logger "$LOGGER"
 done
 
-cp -r $TMPDIR/batch_$BATCH_ID/* ${SCRIPTDIR}/../runs/guidance_models/batch_${BATCH_ID}
+cp -r $TMPDIR/batch_$BATCH_ID/* ${SCRIPTDIR}/../runs/guidance_models/batched_runs/batch_${BATCH_ID}
 
 rm -r ${TMPDIR}/batch_${BATCH_ID}
 rm -r ${TMPDIR}/batch_${BATCH_ID}.tar.gz
