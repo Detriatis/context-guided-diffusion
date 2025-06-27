@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=model_eval
-#SBATCH --array=2-52
+#SBATCH --array=52-52
 #SBATCH --partition=multicore
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=2G
