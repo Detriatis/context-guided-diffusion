@@ -169,7 +169,7 @@ def train_guidance_model(
                     target_logvar_hyper = target_logvar_val,
                     target_mean_hyper = target_mean_val,
                 )
-                reg_scale = batch_size * len(dataloader)
+                reg_scale = batch_size * len(dataloader) * y.shape[1]
                 reg /= reg_scale
                 reg = reg * (512 / ctx_size)
             else: 
@@ -177,8 +177,9 @@ def train_guidance_model(
             
             # L2 Regularization
             l2 = sum((p ** 2).sum() for p in guidance_model.parameters())
+            l2 = (1 / (2 * l2_lambda)) * l2 / reg_scale 
             
-            loss = nll + l2_lambda * l2 + reg_lambda * reg 
+            loss = nll + l2 + reg_lambda * reg 
             guidance_optimizer.zero_grad()
             loss.backward()
             guidance_optimizer.step()
@@ -280,7 +281,10 @@ if __name__ == '__main__':
     
     guidance_model = GuidanceModel(2, 32 , 2, 2).to(device)
     embedding_generator = GuidanceModel(2, 32, 2, 2).to(device)
-   
+    
+    for param in embedding_generator.parameters():
+        param.requires_grad = False 
+
     def context_encoder(x):
         h=embedding_generator.inlayer(x)
         for layer in embedding_generator.midlayer:
