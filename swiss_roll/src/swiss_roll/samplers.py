@@ -1,4 +1,12 @@
 import torch
+from torch.distributions import Normal
+
+from swiss_roll import DATA_DIR, RUNS_DIR
+from swiss_roll.utils import load_model
+from swiss_roll.diffusion import DiffusionModel
+from swiss_roll.guidance import GuidanceModel
+from swiss_roll.scheduling import Schedular 
+
 
 def sample_ddpm(model, 
                 nsamples, 
@@ -71,10 +79,9 @@ def normalised_grad(logp: torch.Tensor,
                     x_t: torch.Tensor,
                     eps: float = 1e-8) -> torch.Tensor:
     
-    g = torch.autograd.grd(logp, x_t, create_graph=False)
-    return g / g.norm(dim=1, keemdim=True) + eps
+    (g,) = torch.autograd.grad(logp, x_t, create_graph=False)
+    return g / (g.norm(dim=1, keepdim=True) + eps)
 
-@torch.no_grad()
 def sample_ddpm_guided(diffusion_model,
                       guidance_model, 
                       *, 
@@ -85,34 +92,56 @@ def sample_ddpm_guided(diffusion_model,
                       guidance_scale: float = 3.0, 
                       device: torch.device = "cuda"):
 
-    """Sampler following the Denoising Diffusion Probabilistic Models method by Ho et al (Algorithm 2)"""
+
     T = len(betas) - 1
+    nfeatures = 2
+    x = torch.randn(nsamples, nfeatures, device=device) 
+    trajectory = [x.clone()]
+    sqrt_beta = betas.sqrt()
 
-    
-    x = torch.randn(size=(nsamples, nfeatures)).to(device)
-    xt = [x]
-    for t in range(diffusion_steps-1, 0, -1):
-        with torch.no_grad():
-            predicted_noise = model(x, torch.full([nsamples, 1], t).to(device))
-            # See DDPM paper between equations 11 and 12
-            variance = betas[t]
-            std = variance ** (0.5)
-            mu = predicted_mu(predicted_noise, x, t)
-        if t > 1:
-            x.requires_grad_(True) 
-            mu_g, r = guidance_model(x)            
-            var_g = torch.exp(r).clamp_min(1e-6)
-            
-            # NLL Loss
-            dist = torch.distributions.Normal(mu_g, var_g ** 0.5)
-            nll = dist.log_prob(target_y * torch.ones_like(mu_g)).sum()
-            nll.backward()
-            g = x.grad
+    for t in range(T, 0, -1):
+        t_tensor = torch.full((nsamples, 1), t, device=device, dtype=torch.long)
+        eps_t = diffusion_model(x, t_tensor)
+        mu_t = predicted_mu(eps_t, x, t, alphas_bar)
+        sigma_t = sqrt_beta[t]
 
-            # See DDPM paper section 3.2.
-            # Choosing the variance through beta_t is optimal for x_0 a normal distribution
-            x = mu + std * torch.randn(size=(nsamples, nfeatures)).to(device) + guidance_scale * variance * g
+        x = x.detach().requires_grad_(True)
+        preds_g = guidance_model(x) 
+        mu_g, logvar_g = torch.chunk(preds_g, 2, dim=-1)
+        var_g = torch.exp(logvar_g).clamp_min(1e-6)
+        logp = Normal(mu_g, var_g.sqrt()).log_prob(y).sum()
+        g = normalised_grad(logp, x)
+
+        if t > 1: 
+            noise = torch.randn_like(x)
+            x = mu_t + sigma_t * noise + guidance_scale * betas[t] * g 
         else: 
-            x = mu 
-        xt += [x]
-    return x, xt
+            x = mu_t 
+
+        trajectory.append(x.clone())
+
+    return x, trajectory
+
+
+if __name__ == '__main__':
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    
+    diffusion_model_path = DATA_DIR / 'generator.pth' 
+    diffusion_model = load_model(DiffusionModel, diffusion_model_path)
+
+    schedule = Schedular(device=device)
+
+    guidance_model_path = RUNS_DIR / 'guidance_models' / 'run_0000' / 'guidance_model.pth'
+    guidance_model = load_model(GuidanceModel, guidance_model_path)
+    y_cond = torch.tensor([[1.0]], device=device, dtype=torch.float32)
+
+    samples, traj = sample_ddpm_guided(
+        diffusion_model=diffusion_model, 
+        guidance_model=guidance_model,
+        betas=schedule.betas,
+        alphas_bar=schedule.bar_alphas,
+        y=y_cond,
+        nsamples=8,
+        guidance_scale=3.0,
+        device=device 
+    ) 
