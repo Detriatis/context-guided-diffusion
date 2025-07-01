@@ -65,11 +65,9 @@ class HyperOptRun:
 
     def writeout_study(self):
         df = self.study.trials_dataframe()
-        path = RUNS_DIR / 'bayesopt' / str(self.run_id) 
         
-        path.mkdir(parents=True, exist_ok=True)
-        df.to_csv(path / f'trials_{str(self.run_id)}.csv', index=False)
-        save_config(self.cfg, path / f'conf_{str(self.run_id)}.yaml') 
+        df.to_csv(self.writeout / f"trials_{self.run_id}.csv", index=False)
+        save_config(self.cfg, self.writeout / f"conf_{self.run_id}.yaml")
 
 
     def objective_single(self, trial: optuna.trial.Trial) -> float:
