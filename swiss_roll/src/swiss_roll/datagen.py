@@ -7,7 +7,7 @@ np.random.seed(42)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--samples', type=int, default = 100_000, required=False)
-parser.add_argument('--noise', type=float, default = 0.5 ,required=False)
+parser.add_argument('--noise', type=float, default = 0.3 ,required=False)
 
 def normalise(array: np.array): 
     shifted = array - np.mean(array)
