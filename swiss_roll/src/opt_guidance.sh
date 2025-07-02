@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=model_eval
 #SBATCH --array=52-52
-#SBATCH --partition=multicore
+#SBATCH --partition=multicore-small
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=2G
 #SBATCH --time=10:00:00

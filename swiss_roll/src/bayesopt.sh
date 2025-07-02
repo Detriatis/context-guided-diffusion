@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=model_eval
-#SBATCH --array=0-11
+#SBATCH --array=8-16
 #SBATCH --partition=multicore
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=2G
+#SBATCH --mem=4G
 #SBATCH --time=12:00:00
 #SBATCH --output=../logs/job_%A_%a.out
 
