@@ -188,19 +188,21 @@ def train_guidance_model(
                                         target_logvar=cfg.cgd.target_logvar,
                                         target_mean=cfg.cgd.target_mean) 
            
-            if cfg.run.reg_type == "None":
-                raw_reg = 0
-
 
             if cfg.cgd.reg_scale_by== 'dataset_size': 
                 reg_scale = cfg.train.batch_size * len(dataloader)
            
             if cfg.cgd.reg_scale_by== 'ctx_size':
                 reg_scale = cfg.cgd.ctx_size
+            
+            if cfg.run.reg_type == "None":
+                reg = 0
 
+            if cfg.run.reg_type == 'cgd':
+                reg = (raw_reg / reg_scale) * cfg.cgd.reg_lambda
 
-            reg = (raw_reg / reg_scale) * cfg.cgd.reg_lambda
-
+            if cfg.run.reg_type == 'mse':
+                reg = (raw_reg) * cfg.cgd.reg_lambda
 
             # L2 Regularization
             l2 = sum((p ** 2).sum() for p in guidance_model.parameters())

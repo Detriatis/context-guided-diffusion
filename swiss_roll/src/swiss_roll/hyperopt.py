@@ -6,13 +6,14 @@ from optuna.integration import BoTorchSampler
 from swiss_roll import RUNS_DIR
 from swiss_roll.guidance import run_once
 from swiss_roll.config import OptParams, CGDParams, TrainParams, RunParams, SamplerParams, Config, load_config, save_config, load_hyperoptconfig
+from swiss_roll.utils import save_metrics, save_model
 
 class HyperOptRun: 
     def __init__(self, conf_path: Path, log_path: Path, writeout: Path):
         self.conf_path = conf_path 
         self.log_path = log_path 
         self.writeout = writeout 
-
+        
         self.cfg =  load_hyperoptconfig(conf_path)
         self.logger = self.init_logger(log_path)
         self.sampler = self.init_sampler()
