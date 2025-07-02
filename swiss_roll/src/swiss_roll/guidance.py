@@ -138,8 +138,8 @@ def train_guidance_model(
     device,
 ):
     
-    cfg.cgd.sigma_t = torch.tensor(float(cfg.cgd.sigma_t), dtype=torch.float32, device=device, requires_grad=False)
-    cfg.cgd.tau_t = torch.tensor(float(cfg.cgd.tau_t), dtype=torch.float32, device=device, requires_grad=False)
+    sigma_t = torch.tensor(float(cfg.cgd.sigma_t), dtype=torch.float32, device=device, requires_grad=False)
+    tau_t = torch.tensor(float(cfg.cgd.tau_t), dtype=torch.float32, device=device, requires_grad=False)
     guidance_model.train()
     
     for epoch in range(cfg.train.n_epochs):
@@ -177,8 +177,8 @@ def train_guidance_model(
                     raw_reg = cgd_regularization_term(
                         model_predictions = ctx_preds,
                         context_embeddings = ctx_embeds.detach(),
-                        covariance_scale_hyper = cfg.cgd.sigma_t,
-                        diagonal_offset_hyper = cfg.cgd.tau_t,
+                        covariance_scale_hyper = sigma_t,
+                        diagonal_offset_hyper = tau_t,
                         target_logvar_hyper = cfg.cgd.target_logvar,
                         target_mean_hyper = cfg.cgd.target_mean,
                     )
