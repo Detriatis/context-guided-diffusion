@@ -136,7 +136,6 @@ def train_guidance_model(
     cfg: Config, 
     logger, 
     device,
-    update_embeds=False,
 ):
     
     cfg.cgd.sigma_t = torch.tensor(float(cfg.cgd.sigma_t), dtype=torch.float32, device=device, requires_grad=False)
@@ -154,7 +153,7 @@ def train_guidance_model(
             
             preds, embed = guidance_model(x_perturbed)
             mu, logvar = preds.chunk(2, dim=-1)
-            var = torch.exp(logvar) + 1.0
+            var = torch.exp(logvar)
             loss_fn = GaussianNLLLoss(full=True)
             y_perturbed, _ = schedular.noise(y, t)
 
